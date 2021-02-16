@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, include
+from django.contrib.auth import views as auth_views
 from . import views
 
 app_name = "blog"
@@ -11,4 +12,6 @@ urlpatterns = [
         name="post_detail",
     ),
     path("<int:post_id>/share/", views.post_share, name="post_share"),
+    path("dashboard/", views.dashboard, name="dashboard"),
+    path("register/", views.register, name="register"),
 ]

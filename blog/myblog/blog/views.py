@@ -2,10 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.mail import send_mail
-
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from .models import Post, Comment
 
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, LoginForm, CustomUserCreationForm
 
 
 class PostListView(ListView):
@@ -83,3 +86,39 @@ def post_share(request, post_id):
     return render(
         request, "blog/post/share.html", {"post": post, "form": form, "sent": sent}
     )
+
+
+def user_login(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username=cd["username"], password=cd["password"])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponse("Authenticated successfully")
+                else:
+                    return HttpResponse("Disabled account")
+            else:
+                return HttpResponse("Invalid login")
+    else:
+        form = LoginForm
+    return render(request, "blog/login.html", {"form": form})
+
+
+# @login_required
+def dashboard(request):
+    return render(request, "blog/dashboard.html", {"section": dashboard})
+
+
+def register(request):
+    if request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect(reverse("blog:dashboard"))
+    else:
+        form = CustomUserCreationForm
+    return render(request, "blog/register.html", {"form": form})

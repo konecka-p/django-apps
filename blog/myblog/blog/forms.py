@@ -1,6 +1,7 @@
 from django import forms
-
+from django.contrib.auth.forms import UserCreationForm
 from .models import Comment
+
 
 class EmailPostForm(forms.Form):
     name = forms.CharField(max_length=25)
@@ -12,4 +13,14 @@ class EmailPostForm(forms.Form):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = {'name', 'email', 'body'}
+        fields = {"name", "email", "body"}
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        fields = UserCreationForm.Meta.fields + ("email",)

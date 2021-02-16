@@ -1,14 +1,25 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>{% block title %}{% endblock %}</title>
-    <link href="{% static "css/blog.css" %}" rel="stylesheet">
+    <link href="{% static " css/blog.css" %}" rel="stylesheet">
 </head>
-<body>
-<div id="content">
-    {% block content %}
-    {% endblock %}
-</div>
-</body>
+<style>
+    label,
+    input {
+        display: block;
+    }
+
+    span.helptext {
+        display: none;
+    }
+</style>
+
+<h1>Welcome to Python Blog</h1>
+
+{% block content %}
+{% endblock %}
+
 </html>
