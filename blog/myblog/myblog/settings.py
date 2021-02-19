@@ -10,6 +10,7 @@ load_dotenv()
 
 def get_secret(setting):
     try:
+        print(setting, os.environ.get(setting))
         return os.environ.get(setting)
     except KeyError:
         error_msg = "Set the {0} environment variable".format(setting)
@@ -126,3 +127,11 @@ LOGIN_REDIRECT_URL = reverse_lazy("blog:dashboard")
 LOGOUT_REDIRECT_URL = reverse_lazy("blog:dashboard")
 LOGIN_URL = reverse_lazy("login")
 LOGOUT_URL = reverse_lazy("logout")
+
+# SMTP settings
+EMAIL_BACKEND = get_secret("EMAIL_BACKEND")
+EMAIL_HOST = get_secret("EMAIL_HOST")
+EMAIL_PORT = get_secret("EMAIL_PORT")
+EMAIL_HOST_USER = get_secret("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
